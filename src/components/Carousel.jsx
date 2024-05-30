@@ -84,6 +84,9 @@ const ButtonContainer = styled.div`
     text-align: center;
     display: flex;
     justify-content: center;
+    align-items : center;
+    p {
+    }
 `;
 
 const ChangeButton = styled.button`
@@ -92,4 +95,10 @@ const ChangeButton = styled.button`
     border: none;
     border-radius: 10%;
     margin: 0px 10px;
+
+    width : 40px;
+    height : 40px;
+
+    color : #FFFFFF;
+    background-color : #000000;
 `

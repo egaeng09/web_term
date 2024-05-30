@@ -1,7 +1,7 @@
 import NavBar from '../components/NavBar';
 import { Container } from '../styles/Page'
 
-function OwnerPage() {
+function BookPage() {
     return(
         <Container>
             <NavBar></NavBar>
@@ -9,4 +9,4 @@ function OwnerPage() {
     );
 }
 
-export default OwnerPage;
+export default BookPage;
