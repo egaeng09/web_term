@@ -1,0 +1,76 @@
+
+
+.react-datepicker {
+  border: transparent !important;
+  font-family: none !important;
+  max-width: 1000px !important;
+}
+
+.react-datepicker__children-container {
+  width: 100% !important;
+}
+
+.react-datepicker__input-container {
+  width: 150px !important;
+  height: 32px !important;
+  position: relative; /* changed from absolute */
+}
+
+.react-datepicker__input-container > input {
+  position: relative; /* changed from absolute */
+  text-align: center;
+  color: white; /* 텍스트 색상을 흰색으로 변경 */
+  background-color: black; /* 배경색을 검정색으로 변경 */
+  cursor: pointer;
+  width: 180px;
+  height: 32px;
+  border: 1px solid #ccc; /* 원하는 경우 테두리 추가 */
+  border-radius: 4px; /* 원하는 경우 모서리 둥글게 설정 */
+}
+
+.react-datepicker__input-container > input:focus {
+  outline: white;
+}
+
+.react-datepicker__header {
+  border-bottom: none !important;
+  background-color: #ffffff !important;
+  font-size: 1rem;
+}
+
+.react-datepicker__month-container {
+  min-height: 450px !important;
+}
+
+.react-datepicker__day--keyboard-selected,
+.react-datepicker__day--in-range {
+  background-color: #ccc !important;
+  color: #000000 !important;
+}
+
+.react-datepicker__day--disabled .group {
+  text-decoration: line-through !important;
+}
+
+.holiday {
+  color: #ff0000 !important;
+}
+
+.checkout {
+  color: #8e8e8e !important;
+}
+
+.react-datepicker__day--disabled {
+  text-decoration: line-through !important;
+}
+
+.checkout.react-datepicker__day--disabled .group {
+  color: #aaa !important;
+  text-decoration: line-through !important;
+}
+
+.holiday.react-datepicker__day--disabled .group {
+  color: #aaa !important;
+  text-decoration: line-through !important;
+}
+

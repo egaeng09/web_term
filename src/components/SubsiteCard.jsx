@@ -11,7 +11,7 @@ function SubsiteCard({subsite_data}) {
     const navigate = useNavigate();
 
     const bookBtn = () => {
-      navigate('/book');
+      navigate('/book', {state:{subsite_id:{id}}});
     };
 
     return(
@@ -33,17 +33,17 @@ function SubsiteCard({subsite_data}) {
 export default SubsiteCard;
 
 const ThumbContainer = styled.div`
-    width : 400px;
+    width : 300px;
     img {
-        width : 400px;
-        height : 400px;
+        width : 300px;
+        height : 300px;
     }
 `
 
 const Container = styled.div`
-    width : 100%;
+    width : 44%;
     border : 1px solid #CCCCCC;
-    height : 400px;
+    height : 300px;
     margin-bottom : 30px;
     display : flex;
     justify-content : space-between;
@@ -72,4 +72,5 @@ const BookBtn = styled.div`
     
     color : #FFFFFF;
     background-color : #000000;
+    border-radius: 10%;
 `

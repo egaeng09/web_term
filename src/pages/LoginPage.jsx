@@ -24,7 +24,7 @@ function LoginPage() {
                     <LoginBtn>로그인</LoginBtn>
                 </LineContainer>
                 <LineContainer>
-                    <p onClick = {() => navigate("/")}>회원가입</p><p onClick = {() => navigate("/")}>비밀번호 찾기</p>
+                    <p onClick = {() => navigate("/signup")}>회원가입</p><p onClick = {() => navigate("/findpassword")}>비밀번호 찾기</p>
                 </LineContainer>
             </FormContainer>
         </Container>

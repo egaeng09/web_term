@@ -2,3 +2,4 @@ react-router-dom
 styled-components
 axios
 react-icons
+react-datepicker date-fns

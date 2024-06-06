@@ -49,7 +49,7 @@ function Carousel(props) {
         <ChangeButton onClick={move} data-btntype={"prev"}>
           &#60;
         </ChangeButton>
-        <p>{currentSlide + 1}</p>
+        <p>{currentSlide + 1} / {TOTAL_SLIDES}</p>
         <ChangeButton onClick={move} data-btntype={"next"}>
           &#62;
         </ChangeButton>
