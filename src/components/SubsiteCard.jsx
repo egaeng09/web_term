@@ -6,7 +6,7 @@ import { FaCampground } from "react-icons/fa6";
 const baseImgUrl = "images/";
 
 function SubsiteCard({subsite_data}) {
-    const { id, sity_type, capacity, price, thumbnail } = subsite_data;
+    const { id, site_type, capacity, price, thumbnail } = subsite_data;
     
     const navigate = useNavigate();
 
@@ -21,7 +21,7 @@ function SubsiteCard({subsite_data}) {
             </ThumbContainer>
             <InfoContent>
                 <FaCampground/>
-                <p>{sity_type}</p>
+                <p>{site_type}</p>
                 <p>{capacity}명</p>
                 <p>{price}원</p>
             </InfoContent>

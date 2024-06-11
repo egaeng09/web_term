@@ -3,48 +3,14 @@ import NavBar from "../components/NavBar";
 import { Container } from "../styles/Page";
 import { useLocation, useNavigate } from "react-router-dom";
 import BookCalendar from "../components/BookCalendar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaLocationDot } from "react-icons/fa6";
 import { IoIosTime } from "react-icons/io";
 import { IoTime } from "react-icons/io5";
+import { book, getBookedDates, getCampFromSite, getSite } from "../services/campsite";
+import { formatTime } from "./SiteDetailPage";
 
 const baseImgUrl = "images/";
-
-const temp_camp_data = {
-  name: "진진당 캠핑장",
-  address: "경상북도 구미시 대학로 3길",
-  contact: "010-4212-1212",
-  information: "낙동강을 끼고 즐기는 산장 캠핑",
-  check_in_time: "15:00",
-  check_out_time: "11:00",
-  thumbnail: "img_tent2.png",
-  start_manner_time: "00:00",
-  end_manner_time: "05:00",
-  amenities: [
-    {
-      name: "wifi",
-    },
-    {
-      name: "화장실",
-    },
-    {
-      name: "샤워실",
-    },
-  ],
-};
-
-const temp_site_data = {
-  sity_type: "카라반",
-  capacity: 3,
-  price: 100000,
-  thumbnail: "img_tent4.png",
-};
-
-const reservedDates = [
-  new Date(2024, 5, 15), // 예: 2024년 6월 15일
-  new Date(2024, 5, 20), // 예: 2024년 6월 20일
-  // 추가적인 예약된 날짜를 이곳에 추가
-];
 
 function BookPage() {
   const navigate = useNavigate();
@@ -52,13 +18,24 @@ function BookPage() {
   const location = useLocation();
   
   const { id } = location.state.subsite_id;
-  const { name, address, check_in_time, check_out_time } = temp_camp_data;
-  const { sity_type, capacity, price, thumbnail } = temp_site_data;
+
+  const [camp, setCamp] = useState({});
+  const [site, setSite] = useState({});
+  const [bookedDates, setBookedDates] = useState([]);
 
   const [selectedDates, setSelectedDates] = useState([null, null]);
-  const [dateList, setDateList] = useState([]);
+
   const [numOfDate, setNumOfDate] = useState(0);
   const [numOfPeople, setNumOfPeople] = useState(1);
+
+  const { name, address, check_in_time, check_out_time } = camp;
+  const { site_type, capacity, price, thumbnail } = site;
+
+  useEffect(() => {
+    getCampFromSite(id).then(data => {setCamp(data.campsite[0])})
+    getSite(id).then(data => {setSite(data.subsite[0])})
+    getBookedDates(id).then(data => handleBookedDates(data.dates))
+  }, [])
 
   const handleDateChange = (dates) => {
     setSelectedDates(dates);
@@ -73,9 +50,21 @@ function BookPage() {
         tempDate.setDate(tempDate.getDate() + 1); // tempDate를 하루 증가
         result.push(tempDate.toISOString().slice(0, 10));
     }
-    setDateList(result);
     setNumOfDate(result.length);
   };
+
+  const handleBookedDates = (dates) => {
+    let reserved = [];
+    
+    dates.map((d) => {
+      let tempDate = new Date(d.check_in_date);
+      while (tempDate < new Date(d.check_out_date)) {
+        tempDate.setDate(tempDate.getDate() + 1);
+        reserved.push(tempDate.toISOString().slice(0, 10));
+      }
+      setBookedDates(reserved);
+    })
+  }
 
   const handleNOPChange = (type) => {
     if (type === 0) {
@@ -99,8 +88,23 @@ function BookPage() {
       alert("날짜를 선택해주세요. ");
       return;
     } else {
-      navigate("/book/result");
-      console.log(dateList);
+      const bookData = {
+        user_id : sessionStorage.getItem("id"),
+        subsite_id : id,
+        check_in_date : `${selectedDates[0].getFullYear()}-${String(selectedDates[0].getMonth() + 1).padStart(2, '0')}-${String(selectedDates[0].getDate()).padStart(2, '0')}`,
+        check_out_date : `${selectedDates[1].getFullYear()}-${String(selectedDates[1].getMonth() + 1).padStart(2, '0')}-${String(selectedDates[1].getDate()).padStart(2, '0')}`,
+        capacity : numOfPeople,
+        price : price * numOfDate,
+        accept : 0,
+      };
+      book(bookData).then(data => { 
+        if(data) {
+          navigate("/book/result", {state:{isbook : true, book:bookData, camp : camp, site : site}});
+        }
+        else {
+          navigate("/book/result", {state:{isbook : false}});
+        }
+    })
     }
   };
 
@@ -121,14 +125,14 @@ function BookPage() {
           <InfoLine>
             <IoIosTime />
             <p>체크인</p>
-            <p>{check_in_time}</p>  
+            <p>{formatTime(check_in_time)}</p>  
             <IoTime />
             <p>체크아웃</p>
-            <p>{check_out_time}</p>
+            <p>{formatTime(check_out_time)}</p>
           </InfoLine>
           <InfoLine></InfoLine>
           <InfoLine>
-            <p>{sity_type}</p>
+            <p>{site_type}</p>
             <p>{capacity}명</p>
             <p>{price}원</p>
           </InfoLine>
@@ -138,7 +142,7 @@ function BookPage() {
         <BookCalendar
           onChange={handleDateChange}
           getDateRange = {getDateRange}
-          reservedDates={reservedDates}
+          reservedDates={bookedDates}
         />
         <SelectedInfoContainer>
           <SelectedInfo>

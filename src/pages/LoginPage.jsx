@@ -2,12 +2,41 @@ import styled from 'styled-components';
 import NavBar from '../components/NavBar';
 import { Container } from '../styles/Page'
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { login } from '../services/auth';
 
 function LoginPage() {
     const navigate = useNavigate();
 
-    const Login = () => {
+    const [userData, setUserData] = useState({email : "", password : ""});
+    
+    const onChange = (e) => {
+        const saveData = {
+          ...userData, [e.target.name]:e.target.value 
+        }
+        setUserData(saveData)
+    }
 
+    const onKeyDown = (e) => {
+        if (e.key === "Enter") {
+            Login();
+        }
+    };
+
+    const Login = () => {
+        login(userData).then(data => {
+            if(data.error) {
+                alert("회원 정보가 일치하지 않습니다.")
+            }
+            else if (data.login){
+                console.log(data);
+                sessionStorage.setItem("name", data.name);
+                sessionStorage.setItem("email", data.email);
+                sessionStorage.setItem("id", data.id);
+                sessionStorage.setItem("type", data.type);
+                navigate("/");
+            }
+        })
     }
 
     return(
@@ -15,13 +44,13 @@ function LoginPage() {
             <NavBar></NavBar>
             <FormContainer>
                 <LineContainer>
-                    <span>ID </span><input type = "text"></input>
+                    <span>EMAIL </span><input type = "text" name="email" onChange = {onChange} onKeyDown = {onKeyDown}></input>
                 </LineContainer>
                 <LineContainer>
-                    <span>PW </span><input type = "password"></input>
+                    <span>PW </span><input type = "password" name="password" onChange = {onChange} onKeyDown = {onKeyDown}></input>
                 </LineContainer>
                 <LineContainer>
-                    <LoginBtn>로그인</LoginBtn>
+                    <LoginBtn onClick = {Login}>로그인</LoginBtn>
                 </LineContainer>
                 <LineContainer>
                     <p onClick = {() => navigate("/signup")}>회원가입</p><p onClick = {() => navigate("/findpassword")}>비밀번호 찾기</p>

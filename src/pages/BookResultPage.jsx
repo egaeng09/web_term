@@ -9,45 +9,27 @@ import { IoIosTime } from "react-icons/io";
 import { IoTime } from "react-icons/io5";
 
 const baseImgUrl = "images/";
-const temp_camp_data = {
-  name: "진진당 캠핑장",
-  address: "경상북도 구미시 대학로 3길",
-  contact: "010-4212-1212",
-  information: "낙동강을 끼고 즐기는 산장 캠핑",
-  check_in_time: "15:00",
-  check_out_time: "11:00",
-  thumbnail: "img_tent2.png",
-  start_manner_time: "00:00",
-  end_manner_time: "05:00",
-  amenities: [
-    {
-      name: "wifi",
-    },
-    {
-      name: "화장실",
-    },
-    {
-      name: "샤워실",
-    },
-  ],
-};
-const temp_site_data = {
-  sity_type: "카라반",
-  capacity: 3,
-  price: 100000,
-  thumbnail: "img_tent4.png",
-};
-
-const { name, address, check_in_time, check_out_time } = temp_camp_data;
-const { sity_type, capacity, price, thumbnail } = temp_site_data;
 
 function BookResultPage() {
   const navigate = useNavigate();
 
+  const location = useLocation();
+
+  const { check_in_date, check_out_date, capacity, price } = location.state.book;
+  const { name, address } = location.state.camp;
+  const { sity_type, thumbnail } = location.state.site;
+
   const [bookResult, setBookResult] = useState();
+
   useEffect(() => {
-    setBookResult(true);
-  });
+    if (location.state) {
+      setBookResult(location.state.isbook);
+    }
+    else {
+      navigate('/');
+    }
+    
+  }, [])
 
   const detailBtn = () => {
     navigate('/');
@@ -76,10 +58,10 @@ function BookResultPage() {
                 <InfoLine>
                   <IoIosTime />
                   <p>입실일</p>
-                  <p>{check_in_time}</p>
+                  <p>{check_in_date}</p>
                   <IoTime />
                   <p>퇴실일</p>
-                  <p>{check_out_time}</p>
+                  <p>{check_out_date}</p>
                 </InfoLine>
                 <InfoLine></InfoLine>
                 <InfoLine>
@@ -108,7 +90,7 @@ export default BookResultPage;
 
 const BookResultContainer = styled.div`
   width: 1400px;
-
+  margin : 0 auto;
 `;
 
 const BookInfoContainer = styled.div`

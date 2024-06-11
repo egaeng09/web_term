@@ -1,11 +1,29 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
+import { logout } from '../services/auth';
+
 function NavBar() {
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if(sessionStorage.getItem("name")) {
+      setIsLogin(true);
+    }
+    else {
+      setIsLogin(false);
+    }
+  }, []);
+  const Logout = () => {
+    logout().then(data => {
+      sessionStorage.clear();
+      navigate("/");
+      window.location.reload();
+    })
+  }
 
   return (
     <NavContainer>
@@ -17,7 +35,7 @@ function NavBar() {
       </MenuItemContainer>
       <ItemContainer>
         {isLogin ? <MenuItem>마이페이지</MenuItem> : <MenuItem onClick = {() => navigate("/login")}>로그인</MenuItem>}
-        {isLogin ? <MenuItem>로그아웃</MenuItem> : <MenuItem onClick = {() => navigate("/signup")}>회원가입</MenuItem>}
+        {isLogin ? <MenuItem onClick = {() => Logout()}>로그아웃</MenuItem> : <MenuItem onClick = {() => navigate("/signup")}>회원가입</MenuItem>}
       </ItemContainer>
     </NavContainer>
   );
