@@ -8,7 +8,6 @@ import { FaLocationDot } from "react-icons/fa6";
 import { IoIosTime } from "react-icons/io";
 import { IoTime } from "react-icons/io5";
 
-const baseImgUrl = "images/";
 
 function BookResultPage() {
   const navigate = useNavigate();
@@ -17,13 +16,16 @@ function BookResultPage() {
 
   const { check_in_date, check_out_date, adults, kids, price } = location.state.book;
   const { name, address } = location.state.camp;
-  const { sity_type, thumbnail } = location.state.site;
+  const { sity_type } = location.state.site;
 
   const [bookResult, setBookResult] = useState();
+  const [imgUrl, setImgUrl] = useState();
 
   useEffect(() => {
     if (location.state) {
       setBookResult(location.state.isbook);
+      setImgUrl(location.state.img);
+
     }
     else {
       navigate('/');
@@ -46,7 +48,7 @@ function BookResultPage() {
           <BookResultContainer>
             <BookInfoContainer>
               <ThumbContainer>
-                <img src={baseImgUrl + thumbnail}></img>
+                <img src={imgUrl}></img>
               </ThumbContainer>
               <InfoContent>
                 <InfoLine>

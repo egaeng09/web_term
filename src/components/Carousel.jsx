@@ -1,27 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { styled } from "styled-components";
+import { getSiteImg } from "../services/campsite";
 
-const baseImgUrl = "images/";
-const imgData = [
-  {
-    id: 0,
-    url: "img_tent1.png",
-  },
-  {
-    id: 1,
-    url: "img_tent2.png",
-  },
-  {
-    id: 2,
-    url: "img_tent3.png",
-  },
-];
 
-const TOTAL_SLIDES = imgData.length;
-
-function Carousel(props) {
+function Carousel({sites, imgUrl}) {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [TOTAL_SLIDES, setTOTAL_SLIDES] = useState(0);
+  const [siteImgs, setSiteImgs] = useState([]);
+  
+  useEffect(() => {
+    async function fetchSiteImages() {
+      const imagePromises = sites.map(async (site) => {
+        const data = await getSiteImg(site.id);
+        const uint8Array = new Uint8Array(data);
+        const blob = new Blob([uint8Array], { type: 'image/jpeg' });
+        return URL.createObjectURL(blob);
+      });
+
+      const images = await Promise.all(imagePromises);
+      setSiteImgs(images);
+      setTOTAL_SLIDES(1 + sites.length);
+    }
+
+    if (sites.length > 0) {
+      fetchSiteImages();
+    }
+  }, [sites]);
+
 
   const move = (e) => {
     const btnType = e.target.dataset.btntype;
@@ -41,8 +47,10 @@ function Carousel(props) {
       <CarouselContainer
         style={{ transform: `translateX(-${currentSlide}00%)` }}
       >
-        {imgData.map((m) => (
-          <img key={m.id} src= {baseImgUrl + m.url} alt={`picture ${m.id}`} />
+        <img src= {imgUrl} alt={"main"} />
+        {siteImgs.map((m, key) => (
+          <img key={m.id} src= {m} alt={`picture ${m.id}`} />
+          
         ))}
       </CarouselContainer>
       <ButtonContainer className="button-container">
@@ -76,6 +84,8 @@ const CarouselContainer = styled.div`
   img {
     width: 500px;
     height: 500px;
+    min-width : 500px;
+    min-height: 500px;
   }
 `;
 

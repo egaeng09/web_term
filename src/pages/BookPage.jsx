@@ -11,8 +11,6 @@ import { book, getAcceptBookedDates, getBookedDates, getCampFromSite, getSite, g
 import { formatTime } from "./SiteDetailPage";
 import checkIsLogin from "../services/auth";
 
-const baseImgUrl = "images/";
-
 function BookPage() {
   const navigate = useNavigate();
 
@@ -21,6 +19,7 @@ function BookPage() {
   const isLogin = checkIsLogin();
   
   const { id } = location.state.subsite_id;
+  const { imgUrl } = location.state.img;
 
   const [camp, setCamp] = useState({});
   const [site, setSite] = useState({});
@@ -42,8 +41,8 @@ function BookPage() {
     }
     getCampFromSite(id).then(data => {setCamp(data.campsite[0])})
     getSite(id).then(data => {setSite(data.subsite[0])})
-    getAcceptBookedDates(id).then(data => handleBookedDates(data.dates, "accept"))
-    getWaitBookedDates(id).then(data => handleBookedDates(data.dates, "wait"))
+    getAcceptBookedDates(id).then(data => {handleBookedDates(data.dates, "accept")})
+    getWaitBookedDates(id).then(data => {handleBookedDates(data.dates, "wait")})
   }, [])
 
   const handleDateChange = (dates) => {
@@ -121,10 +120,11 @@ function BookPage() {
         kids : numOfKid,
         price : price * numOfDate,
         accept : 0,
+        cancel : 0
       };
       book(bookData).then(data => { 
         if(data) {
-          navigate("/book/result", {state:{isbook : true, book:bookData, camp : camp, site : site}});
+          navigate("/book/result", {state:{isbook : true, book:bookData, camp : camp, site : site, img : imgUrl}});
         }
         else {
           navigate("/book/result", {state:{isbook : false}});
@@ -138,7 +138,7 @@ function BookPage() {
       <NavBar></NavBar>
       <BookInfoContainer>
         <ThumbContainer>
-          <img src={baseImgUrl + thumbnail}></img>
+          <img src={imgUrl}></img>
         </ThumbContainer>
         <InfoContent>
           <InfoLine>

@@ -11,9 +11,7 @@ import { BsFillTelephoneFill } from "react-icons/bs";
 import { IoIosInformationCircle, IoIosTime } from "react-icons/io";
 import { IoTime, IoTimerSharp } from "react-icons/io5";
 import ReviewCard from "../components/ReviewCard";
-import { getAmenities, getCamp, getCampReviews, getSites } from "../services/campsite";
-
-const baseImgUrl = "images/";
+import { getAmenities, getCamp, getCampImg, getCampReviews, getSiteImg, getSiteImgs, getSites } from "../services/campsite";
 
 export const formatTime = (time) => {
   if (!time) return '';
@@ -26,6 +24,8 @@ function SiteDetailPage() {
   const [amenities, setAmenities] = useState([]);
   const [sites, setSites] = useState([]);
   const [reviews, setReviews] = useState([]);
+  const [imgUrl, setImgUrl] = useState("");
+  const camp_id = 7;
 
   const {
     name,
@@ -34,23 +34,39 @@ function SiteDetailPage() {
     information,
     check_in_time,
     check_out_time,
-    thumbnail,
     start_manner_time,
     end_manner_time,
   } = camp;
 
   useEffect(() => {
-    getCamp(1).then(data => setCamp(data.campsite[0]))
-    getSites(1).then(data => setSites(data.subsites))
-    getAmenities(1).then(data => setAmenities(data.amenities))
-    getCampReviews(1).then(data => {console.log(data);setReviews(data.reviews)})
-  }, [])
+    async function fetchData() {
+      const campData = await getCamp(camp_id);
+      setCamp(campData.campsite[0]);
+
+      const sitesData = await getSites(camp_id);
+      setSites(sitesData.subsites);
+
+      const amenitiesData = await getAmenities(camp_id);
+      setAmenities(amenitiesData.amenities);
+
+      const reviewsData = await getCampReviews(camp_id);
+      setReviews(reviewsData.reviews);
+
+      const campImgData = await getCampImg(camp_id);
+      const uint8Array = new Uint8Array(campImgData);
+      const blob = new Blob([uint8Array], { type: 'image/jpeg' });
+      const imageUrl = URL.createObjectURL(blob);
+      setImgUrl(imageUrl);
+    }
+
+    fetchData();
+  }, [camp_id]);
 
   return (
     <Container>
       <NavBar></NavBar>
       <InfoContainer>
-        <Carousel />
+        <Carousel imgUrl = {imgUrl} sites = {sites}></Carousel>
         <InfoContent>
           <InfoLine>
             <h3>{name}</h3>
@@ -96,8 +112,8 @@ function SiteDetailPage() {
       </InfoContainer>
       <Contour/>
       <SubsiteContainer>
-        {sites.map((m) => (
-          <SubsiteCard subsite_data={m} />
+        {sites.map((m, key) => (
+          <SubsiteCard subsite_data={m}/>
         ))}
       </SubsiteContainer>
       <Contour/>

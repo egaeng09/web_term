@@ -17,12 +17,22 @@ function NavBar() {
       setIsLogin(false);
     }
   }, []);
+
   const Logout = () => {
     logout().then(data => {
       sessionStorage.clear();
       navigate("/");
       window.location.reload();
     })
+  }
+
+  const goMyPage = () => {
+    if (sessionStorage.getItem("type") === "1") {
+      navigate("/owner");
+    }
+    else {
+      navigate("/mypage");
+    }
   }
 
   return (
@@ -34,7 +44,7 @@ function NavBar() {
         <MenuItem>메뉴</MenuItem>
       </MenuItemContainer>
       <ItemContainer>
-        {isLogin ? <MenuItem>마이페이지</MenuItem> : <MenuItem onClick = {() => navigate("/login")}>로그인</MenuItem>}
+        {isLogin ? <MenuItem onClick = {() => goMyPage()}>마이페이지</MenuItem> : <MenuItem onClick = {() => navigate("/login")}>로그인</MenuItem>}
         {isLogin ? <MenuItem onClick = {() => Logout()}>로그아웃</MenuItem> : <MenuItem onClick = {() => navigate("/signup")}>회원가입</MenuItem>}
       </ItemContainer>
     </NavContainer>

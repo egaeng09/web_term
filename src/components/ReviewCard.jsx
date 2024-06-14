@@ -6,7 +6,7 @@ const baseImgUrl = "images/";
 
 function ReviewCard({ review_data }) {
     
-    const { id, name, check_in_date, check_out_date, adults, kids, thumbnail, content, star } = review_data;
+    const { id, name, check_in_date, check_out_date, adult, child, thumbnail, content, star } = review_data;
 
     const staring = () => {
         const result = [];
@@ -21,7 +21,7 @@ function ReviewCard({ review_data }) {
 
       const parseDate = (dateString) => {
         const date = new Date(dateString);
-        return date.toLocaleDateString('en-CA'); // 'en-CA'는 ISO 형식을 의미합니다.
+        return date.toLocaleDateString('en-CA');
     }
 
     return(
@@ -31,7 +31,7 @@ function ReviewCard({ review_data }) {
             </ReviewThumb>
             <SummaryContainer>
                 <LineContainer>
-                    <h4>{name}</h4> <p>{staring()}</p> <p>{parseDate(check_in_date)} ~ {parseDate(check_out_date)}</p> <p>{adults + kids}명</p>
+                    <h4>{name}</h4> <p>{staring()}</p> <p>{parseDate(check_in_date)} ~ {parseDate(check_out_date)}</p> <p>{adult + child}명</p>
                 </LineContainer>
                 <LineContainer>
                     <p>{content}</p>

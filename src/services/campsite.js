@@ -98,3 +98,36 @@ export async function getBook(id) {
         console.log(error)
     }
 }
+
+export async function getSiteImg(id) {
+    try {
+        const response = await axios.get(`http://127.0.0.1:3001/site/img/?id=${id}`, {
+            responseType: 'arraybuffer'
+        })
+        return response.data;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function getSiteImgs(id) {
+    try {
+        const response = await axios.get(`http://127.0.0.1:3001/site/imgs/?id=${id}`, {
+            responseType: 'arraybuffer'
+        })
+        return response.data;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function getCampImg(id) {
+    try {
+        const response = await axios.get(`http://127.0.0.1:3001/camp/img/?id=${id}`, {
+            responseType: 'arraybuffer'
+        })
+        return response.data;
+    } catch (error) {
+        console.log(error)
+    }
+}

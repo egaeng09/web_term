@@ -9,6 +9,9 @@ import SignUpPage from './pages/SignUpPage';
 import MyPage from './pages/MyPage';
 import FindPasswordPage from './pages/FindPasswordPage';
 import BookResultPage from './pages/BookResultPage';
+import RegisterCampPage from './pages/RegisterCampPage';
+import UpdateCampPage from './pages/UpdateCampPage';
+import ConfirmReservationPage from './pages/ConfirmReservationPage';
 
 function App() {
   return (
@@ -22,6 +25,12 @@ function App() {
       <Route path="/signup" element={<SignUpPage/>} />
       <Route path="/mypage" element={<MyPage/>} />
       <Route path="/findpassword" element={<FindPasswordPage/>} />
+
+      <Route path="/register-camp" element={<RegisterCampPage />} />
+      <Route path="/owner" element={<OwnerPage />} />
+      <Route path="/update-camp" element={<UpdateCampPage />} />
+      <Route path="/confirm-reservation" element={<ConfirmReservationPage />}/>
+
     </Routes>
   );
 }

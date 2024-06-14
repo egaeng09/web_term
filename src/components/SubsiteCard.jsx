@@ -2,22 +2,32 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { FaCampground } from "react-icons/fa6";
+import { useEffect, useState } from "react";
+import { getSiteImg } from "../services/campsite";
 
-const baseImgUrl = "images/";
-
-function SubsiteCard({subsite_data}) {
-    const { id, site_type, capacity, price, thumbnail } = subsite_data;
+function SubsiteCard({subsite_data, addImgs}) {
+    const { id, site_type, capacity, price } = subsite_data;
+    const [imgUrl, setImgUrl] = useState();
     
     const navigate = useNavigate();
 
     const bookBtn = () => {
-      navigate('/book', {state:{subsite_id:{id}}});
+      navigate('/book', {state:{subsite_id:{id}, img : {imgUrl}}});
     };
+
+    useEffect(() => {
+        getSiteImg(id).then(data => {
+            const uint8Array = new Uint8Array(data);
+            const blob = new Blob([uint8Array], { type: 'image/jpeg' });
+            const imageUrl = URL.createObjectURL(blob);
+            setImgUrl(imageUrl);
+        })
+    }, []);
 
     return(
         <Container>
             <ThumbContainer>
-                <img src = {baseImgUrl + thumbnail}></img>
+                <img src = {imgUrl}></img>
             </ThumbContainer>
             <InfoContent>
                 <FaCampground/>

@@ -36,3 +36,13 @@ const checkIsLogin = () => {
     }
 }
 export default checkIsLogin;
+
+export function checkIsAdmin() {
+    if (sessionStorage.getItem("type") !== "1") {
+        alert("관리자가 아닙니다.");
+        return false;
+    }
+    else {
+        return true;
+    }
+}
