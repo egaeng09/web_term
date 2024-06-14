@@ -54,6 +54,24 @@ export async function getBookedDates(id) {
     }
 }
 
+export async function getWaitBookedDates(id) {
+    try {
+        const response = await axios.get(`http://127.0.0.1:3001/site/booked/wait/?id=${id}`)
+        return response.data;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function getAcceptBookedDates(id) {
+    try {
+        const response = await axios.get(`http://127.0.0.1:3001/site/booked/accept/?id=${id}`)
+        return response.data;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export async function getCampReviews(id) {
     try {
         const response = await axios.get(`http://127.0.0.1:3001/camp/reviews/?id=${id}`)

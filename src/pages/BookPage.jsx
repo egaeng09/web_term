@@ -7,8 +7,9 @@ import { useEffect, useState } from "react";
 import { FaLocationDot } from "react-icons/fa6";
 import { IoIosTime } from "react-icons/io";
 import { IoTime } from "react-icons/io5";
-import { book, getBookedDates, getCampFromSite, getSite } from "../services/campsite";
+import { book, getAcceptBookedDates, getBookedDates, getCampFromSite, getSite, getWaitBookedDates } from "../services/campsite";
 import { formatTime } from "./SiteDetailPage";
+import checkIsLogin from "../services/auth";
 
 const baseImgUrl = "images/";
 
@@ -16,25 +17,33 @@ function BookPage() {
   const navigate = useNavigate();
 
   const location = useLocation();
+
+  const isLogin = checkIsLogin();
   
   const { id } = location.state.subsite_id;
 
   const [camp, setCamp] = useState({});
   const [site, setSite] = useState({});
   const [bookedDates, setBookedDates] = useState([]);
+  const [waitBookedDates, setWaitBookedDates] = useState([]);
 
   const [selectedDates, setSelectedDates] = useState([null, null]);
 
   const [numOfDate, setNumOfDate] = useState(0);
-  const [numOfPeople, setNumOfPeople] = useState(1);
+  const [numOfAdult, setNumOfAdult] = useState(1);
+  const [numOfKid, setNumOfKid] = useState(0);
 
   const { name, address, check_in_time, check_out_time } = camp;
   const { site_type, capacity, price, thumbnail } = site;
 
   useEffect(() => {
+    if (!isLogin) {
+      navigate('/login');
+    }
     getCampFromSite(id).then(data => {setCamp(data.campsite[0])})
     getSite(id).then(data => {setSite(data.subsite[0])})
-    getBookedDates(id).then(data => handleBookedDates(data.dates))
+    getAcceptBookedDates(id).then(data => handleBookedDates(data.dates, "accept"))
+    getWaitBookedDates(id).then(data => handleBookedDates(data.dates, "wait"))
   }, [])
 
   const handleDateChange = (dates) => {
@@ -53,7 +62,7 @@ function BookPage() {
     setNumOfDate(result.length);
   };
 
-  const handleBookedDates = (dates) => {
+  const handleBookedDates = (dates, type) => {
     let reserved = [];
     
     dates.map((d) => {
@@ -62,23 +71,38 @@ function BookPage() {
         tempDate.setDate(tempDate.getDate() + 1);
         reserved.push(tempDate.toISOString().slice(0, 10));
       }
-      setBookedDates(reserved);
+      if (type === "accept") {
+        setBookedDates(reserved);
+      }
+      if (type === "wait") {
+        setWaitBookedDates(reserved);
+      }
     })
   }
 
-  const handleNOPChange = (type) => {
-    if (type === 0) {
-      if (numOfPeople <= 1) {
-        setNumOfPeople(1);
-      } else {
-        setNumOfPeople(numOfPeople - 1);
+  const handleNOPChange = (operator, type) => {
+    if (operator === "minus") {
+      if ((numOfAdult + numOfKid) > 0) {
+        if (type === "adult") {
+          if (numOfAdult > 1) {
+            setNumOfAdult(numOfAdult - 1);
+          }
+        }
+        else {
+          if (numOfKid > 0) {
+            setNumOfKid(numOfKid - 1);
+          }
+        }
       }
     }
-    if (type === 1) {
-      if (numOfPeople >= capacity) {
-        setNumOfPeople(capacity);
-      } else {
-        setNumOfPeople(numOfPeople + 1);
+    if (operator === "plus") {
+      if ((numOfAdult + numOfKid) < capacity) {
+        if (type === "adult") {
+          setNumOfAdult(numOfAdult + 1);
+        }
+        else {
+          setNumOfKid(numOfKid + 1);
+        }
       }
     }
   };
@@ -93,7 +117,8 @@ function BookPage() {
         subsite_id : id,
         check_in_date : `${selectedDates[0].getFullYear()}-${String(selectedDates[0].getMonth() + 1).padStart(2, '0')}-${String(selectedDates[0].getDate()).padStart(2, '0')}`,
         check_out_date : `${selectedDates[1].getFullYear()}-${String(selectedDates[1].getMonth() + 1).padStart(2, '0')}-${String(selectedDates[1].getDate()).padStart(2, '0')}`,
-        capacity : numOfPeople,
+        adults : numOfAdult,
+        kids : numOfKid,
         price : price * numOfDate,
         accept : 0,
       };
@@ -143,6 +168,7 @@ function BookPage() {
           onChange={handleDateChange}
           getDateRange = {getDateRange}
           reservedDates={bookedDates}
+          waitDates = {waitBookedDates}
         />
         <SelectedInfoContainer>
           <SelectedInfo>
@@ -166,12 +192,16 @@ function BookPage() {
           </SelectedInfo>
           <SelectedInfo>
             <BoxTextLine>
-              <span>인원</span>
+              <span>성인</span>
+              <span>유아</span>
             </BoxTextLine>
             <BoxTextLine>
-              <ControlBtn onClick={() => handleNOPChange(0)}>&#60;</ControlBtn>
-              <p>{numOfPeople}</p>
-              <ControlBtn onClick={() => handleNOPChange(1)}>&#62;</ControlBtn>
+              <ControlBtn onClick={() => handleNOPChange("minus", "adult")}>&#60;</ControlBtn>
+              <p>{numOfAdult}</p>
+              <ControlBtn onClick={() => handleNOPChange("plus", "adult")}>&#62;</ControlBtn>
+              <ControlBtn onClick={() => handleNOPChange("minus", "kid")}>&#60;</ControlBtn>
+              <p>{numOfKid}</p>
+              <ControlBtn onClick={() => handleNOPChange("plus", "kid")}>&#62;</ControlBtn>
             </BoxTextLine>
           </SelectedInfo>
         </SelectedInfoContainer>

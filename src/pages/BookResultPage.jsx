@@ -15,7 +15,7 @@ function BookResultPage() {
 
   const location = useLocation();
 
-  const { check_in_date, check_out_date, capacity, price } = location.state.book;
+  const { check_in_date, check_out_date, adults, kids, price } = location.state.book;
   const { name, address } = location.state.camp;
   const { sity_type, thumbnail } = location.state.site;
 
@@ -66,7 +66,7 @@ function BookResultPage() {
                 <InfoLine></InfoLine>
                 <InfoLine>
                   <p>{sity_type}</p>
-                  <p>{capacity}명</p>
+                  <p>{adults + kids}명</p>
                   <p>{price}원</p>
                 </InfoLine>
               </InfoContent>

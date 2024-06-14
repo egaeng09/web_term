@@ -6,7 +6,7 @@ const baseImgUrl = "images/";
 
 function ReviewCard({ review_data }) {
     
-    const { id, name, check_in_date, check_out_date, capacity, thumbnail, content, star } = review_data;
+    const { id, name, check_in_date, check_out_date, adults, kids, thumbnail, content, star } = review_data;
 
     const staring = () => {
         const result = [];
@@ -31,7 +31,7 @@ function ReviewCard({ review_data }) {
             </ReviewThumb>
             <SummaryContainer>
                 <LineContainer>
-                    <h4>{name}</h4> <p>{staring()}</p> <p>{parseDate(check_in_date)} ~ {parseDate(check_out_date)}</p> <p>{capacity}명</p>
+                    <h4>{name}</h4> <p>{staring()}</p> <p>{parseDate(check_in_date)} ~ {parseDate(check_out_date)}</p> <p>{adults + kids}명</p>
                 </LineContainer>
                 <LineContainer>
                     <p>{content}</p>

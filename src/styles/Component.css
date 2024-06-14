@@ -74,3 +74,11 @@
   text-decoration: line-through !important;
 }
 
+.waited{
+  color : #6495ED !important;
+} 
+
+.accepted{
+  color : #DB4455 !important;
+  text-decoration: line-through !important;
+} 

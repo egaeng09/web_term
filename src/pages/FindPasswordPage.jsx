@@ -12,7 +12,7 @@ function FindPasswordPage() {
       <NavBar />
       <NoticeContainer>
         <p>비밀번호 찾기 기능은 현재 지원하지 않습니다. </p>
-        <SignUpText onClick = {() => navigate("/signup")}>회원가입으로 이동하기</SignUpText>
+        <AlertText onClick = {() => navigate("/login")}>로그인으로 이동하기</AlertText>
       </NoticeContainer>
     </Container>
   );
@@ -20,7 +20,7 @@ function FindPasswordPage() {
 
 export default FindPasswordPage;
 
-const SignUpText = styled.p`
+const AlertText = styled.p`
     cursor : pointer;
     text-decoration : underline;
 `
