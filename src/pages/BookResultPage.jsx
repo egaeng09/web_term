@@ -25,7 +25,6 @@ function BookResultPage() {
     if (location.state) {
       setBookResult(location.state.isbook);
       setImgUrl(location.state.img);
-
     }
     else {
       navigate('/');
@@ -34,7 +33,7 @@ function BookResultPage() {
   }, [])
 
   const detailBtn = () => {
-    navigate('/');
+    navigate('/mypage');
   };
 
   return (
@@ -72,7 +71,7 @@ function BookResultPage() {
                   <p>{price}원</p>
                 </InfoLine>
               </InfoContent>
-              <DetailBtn onClick = {detailBtn}>상세보기</DetailBtn>
+              <DetailBtn onClick = {detailBtn}>확인하기</DetailBtn>
             </BookInfoContainer>
           </BookResultContainer>
         </div>

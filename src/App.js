@@ -12,12 +12,14 @@ import BookResultPage from './pages/BookResultPage';
 import RegisterCampPage from './pages/RegisterCampPage';
 import UpdateCampPage from './pages/UpdateCampPage';
 import ConfirmReservationPage from './pages/ConfirmReservationPage';
+import ReviewPage from './pages/ReviewPage';
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<MainPage />} />
       <Route path="/detail" element={<SiteDetailPage />} />
+      <Route path='/detail/:camp_id' element={<SiteDetailPage />} />
       <Route path="/book" element={<BookPage/>} />
       <Route path="/book/result" element={<BookResultPage/>} />
       <Route path="/login" element={<LoginPage/>} />
@@ -30,6 +32,8 @@ function App() {
       <Route path="/owner" element={<OwnerPage />} />
       <Route path="/update-camp" element={<UpdateCampPage />} />
       <Route path="/confirm-reservation" element={<ConfirmReservationPage />}/>
+
+      <Route path="/review" element={<ReviewPage/>} />
 
     </Routes>
   );

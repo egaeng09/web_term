@@ -12,6 +12,7 @@ import { IoIosInformationCircle, IoIosTime } from "react-icons/io";
 import { IoTime, IoTimerSharp } from "react-icons/io5";
 import ReviewCard from "../components/ReviewCard";
 import { getAmenities, getCamp, getCampImg, getCampReviews, getSiteImg, getSiteImgs, getSites } from "../services/campsite";
+import { useParams } from "react-router-dom";
 
 export const formatTime = (time) => {
   if (!time) return '';
@@ -25,7 +26,9 @@ function SiteDetailPage() {
   const [sites, setSites] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [imgUrl, setImgUrl] = useState("");
-  const camp_id = 7;
+
+  const params = useParams();
+  const camp_id = params.camp_id;
 
   const {
     name,
@@ -105,7 +108,7 @@ function SiteDetailPage() {
           </InfoLine>
           <InfoLine>
             {amenities ?<> {amenities.map((a) => (
-              <p>{a.name}</p>
+              <p>{a.amenity_name}</p>
             ))}</> : <></>}
           </InfoLine>
         </InfoContent>

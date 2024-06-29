@@ -131,3 +131,14 @@ export async function getCampImg(id) {
         console.log(error)
     }
 }
+
+export async function getReviewImg(id) {
+    try {
+        const response = await axios.get(`http://127.0.0.1:3001/review/img/?id=${id}`, {
+            responseType: 'arraybuffer'
+        })
+        return response.data;
+    } catch (error) {
+        console.log(error)
+    }
+}

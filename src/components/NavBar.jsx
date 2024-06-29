@@ -38,10 +38,7 @@ function NavBar() {
   return (
     <NavContainer>
       <MenuItemContainer>
-        <LogoItem onClick = {() => navigate("/")}>로고</LogoItem>
-        <MenuItem onClick = {() => navigate("/detail")}>캠핑장</MenuItem>
-        <MenuItem>메뉴</MenuItem>
-        <MenuItem>메뉴</MenuItem>
+        <LogoItem onClick = {() => navigate("/")}>캥핑장</LogoItem>
       </MenuItemContainer>
       <ItemContainer>
         {isLogin ? <MenuItem onClick = {() => goMyPage()}>마이페이지</MenuItem> : <MenuItem onClick = {() => navigate("/login")}>로그인</MenuItem>}
@@ -71,8 +68,6 @@ const ItemContainer = styled.div`
 
 const MenuItemContainer = styled.div`
   display: flex;
-  justify-content: space-evenly;
-  width: 800px;
 `;
 
 const MenuItem = styled.div`

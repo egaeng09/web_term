@@ -1,12 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { styled } from "styled-components";
+import { getReviewImg } from "../services/campsite";
 
-const baseImgUrl = "images/";
 
 function ReviewCard({ review_data }) {
     
-    const { id, name, check_in_date, check_out_date, adult, child, thumbnail, content, star } = review_data;
+    const { id, name, check_in_date, check_out_date, adult, child, content, star } = review_data;
+
+    const [imgUrl, setImgUrl] = useState();
+
+    useEffect(() => {
+        getReviewImg(id).then(data => {
+            const uint8Array = new Uint8Array(data);
+            const blob = new Blob([uint8Array], { type: 'image/jpeg' });
+            const imageUrl = URL.createObjectURL(blob);
+            setImgUrl(imageUrl);
+        })
+    }, []);
 
     const staring = () => {
         const result = [];
@@ -27,7 +38,7 @@ function ReviewCard({ review_data }) {
     return(
         <Container>
             <ReviewThumb>
-                <img src = {baseImgUrl + thumbnail} />
+                <img src = {imgUrl} />
             </ReviewThumb>
             <SummaryContainer>
                 <LineContainer>

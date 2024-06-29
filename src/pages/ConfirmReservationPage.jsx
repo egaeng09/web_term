@@ -66,7 +66,7 @@ function ConfirmReservationPage() {
       <NavBar />
       <Title>예약 확정</Title>
       <List>
-        {reservations.filter(reservation => reservation.accept === 0).map(reservation => (
+        {reservations.filter(reservation => reservation.accept === 0 && reservation.cancel === 0).map(reservation => (
           <ListItem key={reservation.book_id}>
             <div>예약자: {reservation.userName} - 입실: {reservation.check_in_date}, 퇴실: {reservation.check_out_date}</div>
             <div>캠핑장 이름: {reservation.campName}</div>
