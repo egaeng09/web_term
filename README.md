@@ -41,7 +41,7 @@
 
 
 5. 예약 정보 조회  
-<image src= "https://github.com/user-attachments/assets/ce26224b-8dab-4cb9-add8-39d25c139605" alt = "예약 정보"><br><br>  
+<image src= "https://github.com/user-attachments/assets/d233890a-d146-4e94-b996-bd8441e06a1c" alt = "예약 정보"><br><br>  
 
 6. 리뷰 작성 및 관리  
 <image src= "https://github.com/user-attachments/assets/287b41ab-ad28-498c-ba28-8306a2e0ca75" alt = "리뷰 작성"><br><br>
